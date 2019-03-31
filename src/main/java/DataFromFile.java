@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -15,88 +16,87 @@ public class DataFromFile {
     StringBuilder state ;
     StringBuilder street;
 
-    public static StringBuilder getList(int k, String namefile)  {
+    public static StringBuilder getList(int listSize, String nameFile)  {
+        StringBuilder listNames =new StringBuilder();
         try {
-            File file = new File(namefile);
+            File file = new File(nameFile);
             Scanner scanner = new Scanner(file);
             int i=0;
-            //String[] listnames =new String[k];
-            StringBuilder listnames =new StringBuilder();
-            while((scanner.hasNextLine())&&(i<k))
+
+            while((scanner.hasNextLine())&&(i<listSize))
             {
-                listnames.append(scanner.nextLine()+"\n");
+                listNames.append(scanner.nextLine()+"\n");
 
                 i++;
 
             }
-            return listnames;
+        } catch (FileNotFoundException e) {
+          //  e.printStackTrace();
+            System.out.println("Ошибка!Файл "+nameFile+" не найден");
         }
-        catch (Exception e)
-        {System.out.println("Ошибка.Файл не найден.");
-            return null;}
+        return listNames;
 
     }
+
     public static String getStrFromFile( int count, StringBuilder stringBuilder1)  {
-        int d=0;
+        int lineCounter=0;
         Scanner scanner = new Scanner(stringBuilder1.toString());
-        while (d!=count)
+        while (lineCounter!=count)
 
         {
             scanner.nextLine();
-            d++;}
+            lineCounter++;}
         return scanner.nextLine();
 
     }
 
-    public void  setListsfromFile(int listsize) {
-
-         boyName = getList(listsize, "src/main/resources/Мужские имена");
-        girlName= getList(listsize, "src/main/resources/Женские имена");
-        boySecondName = getList(listsize, "src/main/resources/Мужские фамилии");
-        girlsSecondName = getList(listsize, "src/main/resources/Женские фамилии");
-         boyMiddleName = getList(listsize, "src/main/resources/Мужские отчества");
-         girlsMiddleName = getList(listsize, "src/main/resources/Женские Отчества");
-         country = getList(listsize, "src/main/resources/Страны");
-       city = getList(listsize, "src/main/resources/Города");
-       state = getList(listsize, "src/main/resources/Область");
-       street = getList(listsize, "src/main/resources/Улицы");
+    public void  setListsfromFile(int listSize) {
+        boyName = getList(listSize, "src/main/resources/Мужские имена");
+        girlName= getList(listSize, "src/main/resources/Женские имена");
+        boySecondName = getList(listSize, "src/main/resources/Мужские фамилии");
+        girlsSecondName = getList(listSize, "src/main/resources/Женские фамилии");
+        boyMiddleName = getList(listSize, "src/main/resources/Мужские отчества");
+        girlsMiddleName = getList(listSize, "src/main/resources/Женские Отчества");
+        country = getList(listSize, "src/main/resources/Страны");
+        city = getList(listSize, "src/main/resources/Города");
+        state = getList(listSize, "src/main/resources/Область");
+        street = getList(listSize, "src/main/resources/Улицы");
 
     }
 
-    public List<Person> getPersonListFromFile(int listsize, List<Person> list){
-        int m=0;
-        int s=0;
+    public List<Person> getPersonListFromFile(int listSize, List<Person> list){
+        int maleLineCounter=0;
+        int femaleLineCounter=0;
 
-        for (int i = 0; i < listsize; i++)
+        for (int i = 0; i < listSize; i++)
         {
-            Person  johnDoe2 =new Person();
-            johnDoe2.getGenderRandom();
-            if (johnDoe2.gender.equals("м"))
-
+            Person  person =new Person();
+            person.getGenderRandom();
+            if (person.gender.equals("м"))
             {
-                johnDoe2.setFirst(getStrFromFile(m,boyName));
-                johnDoe2.setLast(getStrFromFile(m,boySecondName));
-                johnDoe2.setTitle(getStrFromFile(m,boyMiddleName));
-                m++;
-            } else {
-
-                johnDoe2.setFirst(getStrFromFile(s,girlName));
-                johnDoe2.setLast(getStrFromFile(s,girlsSecondName));
-                johnDoe2.setTitle(getStrFromFile(s,girlsMiddleName));
-                s++;
+                person.setFirst(getStrFromFile(maleLineCounter,boyName));
+                person.setLast(getStrFromFile(maleLineCounter,boySecondName));
+                person.setTitle(getStrFromFile(maleLineCounter,boyMiddleName));
+                maleLineCounter++;
             }
 
-            //johnDoe2.setGender(lisgender[i]);
-            johnDoe2.setBirthDayDate();
+            if (person.gender.equals("ж"))
+            {
+                person.setFirst(getStrFromFile(femaleLineCounter,girlName));
+                person.setLast(getStrFromFile(femaleLineCounter,girlsSecondName));
+                person.setTitle(getStrFromFile(femaleLineCounter,girlsMiddleName));
+                femaleLineCounter++;
+            }
 
+            person.setBirthDayDate();
+            person.getAge(  person.birthDayDate, LocalDate.now());
+            person.getIndex();
+            person.setCountry(getStrFromFile(i,country));
+            person.setState(getStrFromFile(i,state));
+            person.setCity(getStrFromFile(i,city));
+            person.setStreet(getStrFromFile(i,street));
 
-            johnDoe2.getAge(  johnDoe2.birthDayDate, LocalDate.now());
-            johnDoe2.setCountry(getStrFromFile(i,country));
-            johnDoe2.setState(getStrFromFile(i,state));
-            johnDoe2.setCity(getStrFromFile(i,city));
-            johnDoe2.setStreet(getStrFromFile(i,street));
-
-            list.add(johnDoe2);
+            list.add(person);
         }
         return list;
 

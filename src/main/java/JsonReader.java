@@ -12,32 +12,33 @@ public List<Person> getPersonListFromJson(String response, List<Person> list)
     JsonParser parser = new JsonParser();
     Gson gson = new GsonBuilder().create();
     JsonElement jsonTree = parser.parse(response);
-    System.out.println("jsonTree " + jsonTree);
+    //System.out.println("jsonTree " + jsonTree);
 
     JsonObject jsonObject = jsonTree.getAsJsonObject();
     JsonElement results = jsonObject.get("results");
-    JsonArray jsonarray = results.getAsJsonArray();
+    JsonArray jsonArray = results.getAsJsonArray();
 
 
-        for (int i = 0; i < jsonarray.size(); i++) {
-            JsonElement temp = jsonarray.get(i);
-            JsonObject jsonobj = temp.getAsJsonObject();
-            JsonElement gender = jsonobj.get("gender");
-            JsonElement elementname = jsonobj.get("name");
-            JsonElement elementlocation = jsonobj.get("location");
-            JsonObject name = elementname.getAsJsonObject();
-            JsonObject location = elementlocation.getAsJsonObject();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonElement temp = jsonArray.get(i);
+            JsonObject jsonObj = temp.getAsJsonObject();
+            JsonElement gender = jsonObj.get("gender");
+            JsonElement elementName = jsonObj.get("name");
+            JsonElement elementLocation = jsonObj.get("location");
+            JsonObject name = elementName.getAsJsonObject();
+            JsonObject location = elementLocation.getAsJsonObject();
 
-            Person johnDoe = gson.fromJson(name, Person.class);
+            Person person = gson.fromJson(name, Person.class);
 
-            johnDoe.setGender(gender.toString());
-            johnDoe.setStreet(location.get("street").toString());
-            johnDoe.setCity(location.get("city").toString());
-            johnDoe.setState(location.get("state").toString());
-            johnDoe.setBirthDayDate();
-            johnDoe.getAge(johnDoe.birthDayDate, LocalDate.now());
+            person.setGender(gender.toString());
+            person.setStreet(location.get("street").toString());
+            person.setCity(location.get("city").toString());
+            person.setState(location.get("state").toString());
+            person.setBirthDayDate();
+            person.getIndex();
+            person.getAge(person.birthDayDate, LocalDate.now());
 
-            list.add(johnDoe);
+            list.add(person);
         }
         return list;
     }

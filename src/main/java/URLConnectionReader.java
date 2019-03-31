@@ -7,17 +7,18 @@ import java.util.List;
 public class URLConnectionReader {
 
     StringBuilder response = new StringBuilder();
-    public List<Person> getPersonList (String urlresponse,int listsize,List<Person> list){
+
+    public List<Person> getPersonList (String urlResponse,int listSize,List<Person> list){
      try
 
     {
-        URL yahoo = new URL(urlresponse);
-        URLConnection yc = yahoo.openConnection();
+        URL url = new URL(urlResponse);
+        URLConnection urlConnection = url.openConnection();
 
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(
-                        yc.getInputStream()));
+                        urlConnection.getInputStream()));
         String inputLine;
 
 
@@ -26,22 +27,22 @@ public class URLConnectionReader {
 
         }
         in.close();
-        JsonReader jsonq = new JsonReader();
-        jsonq.getPersonListFromJson(response.toString(), list);
+        JsonReader json = new JsonReader();
+        json.getPersonListFromJson(response.toString(), list);
         //  System.out.println(list);
     }
-catch(
-    Exception e)
+     catch(
+             Exception e)
 
-    {
-        System.out.println("Не удалось получить доступ к сайту");
+     {
+         System.out.println("Не удалось получить доступ "+urlResponse);
 
-        DataFromFile Spi = new DataFromFile();
-        Spi.setListsfromFile(listsize);
-        Spi.getPersonListFromFile(listsize, list);
+         DataFromFile dataFromFile = new DataFromFile();
+         dataFromFile.setListsfromFile(listSize);
+         dataFromFile.getPersonListFromFile(listSize, list);
 
 
-    }
+     }
 
      return list;
 }}

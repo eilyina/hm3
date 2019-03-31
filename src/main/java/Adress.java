@@ -6,6 +6,7 @@ public class Adress {
     public String city;
     public String state;
     public String country;
+    public int index;
 
     public String getStreet() {
         return street;
@@ -32,6 +33,11 @@ public class Adress {
     }
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public int getIndex(){
+
+       return index= 100000+(1 +(int)( Math.random() * 100000 ));
     }
 
     @Override
